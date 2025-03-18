@@ -26,75 +26,71 @@ const SettingsSection: React.FC<SettingsSectionProps> = ({
         <h3 className="text-lg font-medium">Agent Settings</h3>
       </div>
       
-      <Card className="bg-gradient-to-br from-slate-50 to-white border border-slate-100 shadow-sm">
+      <Card>
         <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium mb-1 text-slate-700">Agent Name</label>
+              <label htmlFor="name" className="block text-sm font-medium mb-1">Agent Name</label>
               <Input 
                 id="name" 
                 name="name"
                 value={editedAgent.name} 
-                onChange={onInputChange} 
-                className="border-slate-200 focus-visible:ring-slate-400"
+                onChange={onInputChange}
               />
             </div>
             
             <div>
-              <label htmlFor="description" className="block text-sm font-medium mb-1 text-slate-700">Description</label>
+              <label htmlFor="description" className="block text-sm font-medium mb-1">Description</label>
               <Textarea 
                 id="description" 
                 name="description"
                 value={editedAgent.description} 
                 onChange={onInputChange} 
-                className="min-h-[100px] border-slate-200 focus-visible:ring-slate-400"
+                className="min-h-[100px]"
               />
             </div>
             
             <div>
-              <label htmlFor="category" className="block text-sm font-medium mb-1 text-slate-700">Category</label>
+              <label htmlFor="category" className="block text-sm font-medium mb-1">Category</label>
               <Input 
                 id="category" 
                 name="category"
                 value={editedAgent.category || ''} 
                 onChange={onInputChange} 
                 placeholder="e.g., Customer Support, Content Generation"
-                className="border-slate-200 focus-visible:ring-slate-400"
               />
             </div>
           </div>
           
           <div className="space-y-4">
             <div>
-              <label htmlFor="version" className="block text-sm font-medium mb-1 text-slate-700">Version</label>
+              <label htmlFor="version" className="block text-sm font-medium mb-1">Version</label>
               <Input 
                 id="version" 
                 name="version"
                 value={editedAgent.version || '1.0.0'} 
-                onChange={onInputChange} 
-                className="border-slate-200 focus-visible:ring-slate-400"
+                onChange={onInputChange}
               />
             </div>
             
             <div>
-              <label htmlFor="author" className="block text-sm font-medium mb-1 text-slate-700">Author</label>
+              <label htmlFor="author" className="block text-sm font-medium mb-1">Author</label>
               <Input 
                 id="author" 
                 name="author"
                 value={editedAgent.author || ''} 
-                onChange={onInputChange} 
-                className="border-slate-200 focus-visible:ring-slate-400"
+                onChange={onInputChange}
               />
             </div>
             
             <div>
-              <label htmlFor="status" className="block text-sm font-medium mb-1 text-slate-700">Status</label>
+              <label htmlFor="status" className="block text-sm font-medium mb-1">Status</label>
               <select
                 id="status"
                 name="status"
                 value={editedAgent.status}
                 onChange={onInputChange as any}
-                className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
@@ -105,7 +101,7 @@ const SettingsSection: React.FC<SettingsSectionProps> = ({
             
             <div className="pt-4">
               <Button 
-                className="w-full bg-primary hover:bg-primary/90 text-white flex items-center gap-2 shadow-sm hover:shadow"
+                className="w-full flex items-center gap-2"
                 onClick={onSaveChanges}
               >
                 <Save className="h-4 w-4" />

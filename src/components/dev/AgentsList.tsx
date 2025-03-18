@@ -49,10 +49,10 @@ const AgentsList = ({ agents, onSelectAgent }: AgentsListProps) => {
                 <div className="col-span-3 md:col-span-2 text-muted-foreground text-right md:text-center">{agent.createdAt}</div>
                 <div className="col-span-2 md:col-span-2 text-right">
                   <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                    agent.status === 'active' ? 'bg-green-100 text-green-800' :
-                    agent.status === 'inactive' ? 'bg-gray-100 text-gray-800' :
-                    agent.status === 'disabled' ? 'bg-red-100 text-red-800' :
-                    'bg-yellow-100 text-yellow-800'
+                    agent.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' :
+                    agent.status === 'inactive' ? 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300' :
+                    agent.status === 'disabled' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' :
+                    'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
                   }`}>
                     {agent.status}
                   </span>

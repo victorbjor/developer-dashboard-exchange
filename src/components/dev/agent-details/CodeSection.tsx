@@ -24,17 +24,17 @@ const CodeSection: React.FC<CodeSectionProps> = ({
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
-          <Card className="bg-gradient-to-br from-slate-50 to-white border border-slate-100 shadow-sm h-full">
+          <Card className="h-full">
             <CardHeader className="p-6 pb-0">
-              <CardTitle className="text-base text-slate-800">Upload New Code</CardTitle>
-              <CardDescription className="text-slate-500">Update your agent's functionality</CardDescription>
+              <CardTitle className="text-base">Upload New Code</CardTitle>
+              <CardDescription>Update your agent's functionality</CardDescription>
             </CardHeader>
             <CardContent className="p-6">
-              <div className="border-2 border-dashed border-slate-200 rounded-lg p-6 text-center bg-slate-50/50">
-                <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-blue-50 mb-4">
+              <div className="border-2 border-dashed border-muted rounded-lg p-6 text-center bg-muted/30">
+                <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-primary/10 mb-4">
                   <FileUp className="h-8 w-8 text-primary" />
                 </div>
-                <p className="mt-2 text-sm text-slate-600">
+                <p className="mt-2 text-sm">
                   Drag and drop your files here, or 
                   <label className="text-primary hover:text-primary/80 ml-1 cursor-pointer">
                     browse
@@ -45,15 +45,15 @@ const CodeSection: React.FC<CodeSectionProps> = ({
                     />
                   </label>
                 </p>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   Supports .json, .py, .js, and other agent files
                 </p>
                 
                 {selectedFile && (
                   <div className="mt-4 text-left">
-                    <p className="text-sm font-medium text-slate-700">Selected file:</p>
-                    <div className="mt-1 py-2 px-3 bg-white border border-slate-200 rounded flex items-center justify-between">
-                      <span className="truncate text-xs text-slate-600">
+                    <p className="text-sm font-medium">Selected file:</p>
+                    <div className="mt-1 py-2 px-3 bg-background border border-border rounded flex items-center justify-between">
+                      <span className="truncate text-xs text-muted-foreground">
                         {selectedFile.name} ({(selectedFile.size / 1024).toFixed(1)} KB)
                       </span>
                       <Button 
@@ -70,7 +70,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
               </div>
               
               <Button 
-                className="w-full mt-4 bg-primary hover:bg-primary/90 text-white flex items-center justify-center gap-2 shadow-sm hover:shadow" 
+                className="w-full mt-4 flex items-center justify-center gap-2" 
                 onClick={onUploadCode}
                 disabled={!selectedFile}
               >
@@ -82,10 +82,10 @@ const CodeSection: React.FC<CodeSectionProps> = ({
         </div>
         
         <div>
-          <Card className="bg-gradient-to-br from-slate-50 to-white border border-slate-100 shadow-sm h-full">
+          <Card className="h-full">
             <CardHeader className="p-6 pb-0">
-              <CardTitle className="text-base text-slate-800">Deployment History</CardTitle>
-              <CardDescription className="text-slate-500">Previous code deployments</CardDescription>
+              <CardTitle className="text-base">Deployment History</CardTitle>
+              <CardDescription>Previous code deployments</CardDescription>
             </CardHeader>
             <CardContent className="p-6 pb-0">
               <div className="space-y-0">
@@ -94,10 +94,10 @@ const CodeSection: React.FC<CodeSectionProps> = ({
                   { version: '1.2.2', date: '2023-12-15', author: 'John Doe' },
                   { version: '1.2.1', date: '2023-11-22', author: 'Jane Smith' },
                 ].map((deployment, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 hover:bg-slate-50 rounded-md transition-colors duration-150 group">
+                  <div key={index} className="flex items-center justify-between p-3 hover:bg-muted/50 rounded-md transition-colors duration-150 group">
                     <div>
-                      <div className="font-medium text-sm text-slate-800">Version {deployment.version}</div>
-                      <div className="text-xs text-slate-500">
+                      <div className="font-medium text-sm">{deployment.version}</div>
+                      <div className="text-xs text-muted-foreground">
                         {deployment.date} by {deployment.author}
                       </div>
                     </div>

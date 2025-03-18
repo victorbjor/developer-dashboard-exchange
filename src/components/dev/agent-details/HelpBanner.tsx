@@ -11,12 +11,12 @@ const HelpBanner: React.FC = () => {
         className="w-full h-full object-cover"
       />
       <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent flex items-center">
-        <div className="px-8 text-white">
-          <h3 className="text-xl font-bold mb-2 text-white">Need Help?</h3>
-          <p className="max-w-md text-white/90 text-sm">
+        <div className="px-8">
+          <h3 className="text-xl font-bold mb-2 text-white dark:text-white">Need Help?</h3>
+          <p className="max-w-md text-white/90 dark:text-white/90 text-sm">
             Check our documentation for more information on creating and managing AI agents.
           </p>
-          <Button className="mt-4 bg-white text-primary hover:bg-white/90 shadow-sm hover:shadow dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700">
+          <Button className="mt-4 bg-white text-primary hover:bg-white/90 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700">
             View Documentation
           </Button>
         </div>
