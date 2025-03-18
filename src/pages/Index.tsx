@@ -17,7 +17,7 @@ const Index = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-        <div className="glass p-8 rounded-xl hover-shadow hover-scale flex flex-col items-center text-center">
+        <div className="glass p-8 rounded-xl shadow-sm transition-transform duration-200 hover:shadow-md flex flex-col items-center text-center">
           <BarChart3 className="h-12 w-12 text-primary mb-4" />
           <h2 className="text-2xl font-semibold mb-2">For Developers</h2>
           <p className="text-muted-foreground mb-6">
@@ -28,7 +28,7 @@ const Index = () => {
           </Link>
         </div>
 
-        <div className="glass p-8 rounded-xl hover-shadow hover-scale flex flex-col items-center text-center">
+        <div className="glass p-8 rounded-xl shadow-sm transition-transform duration-200 hover:shadow-md flex flex-col items-center text-center">
           <MessageSquare className="h-12 w-12 text-primary mb-4" />
           <h2 className="text-2xl font-semibold mb-2">For Users</h2>
           <p className="text-muted-foreground mb-6">
