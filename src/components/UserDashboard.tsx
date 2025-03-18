@@ -2,7 +2,9 @@
 import React, { useState } from "react";
 import ChatDashboard from "./chat/ChatDashboard";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Agent } from "./types/Agent";
+import { HelpCircle, Clock, BarChart2 } from "lucide-react";
 
 // Mock agents for selection
 const availableAgents: Agent[] = [
@@ -42,7 +44,7 @@ const UserDashboard = () => {
     return (
       <div className="container mx-auto p-4 md:p-6 max-w-4xl">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold">Choose an AI Assistant</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Choose an AI Assistant</h1>
           <p className="text-muted-foreground mt-2">Select an agent to start your conversation</p>
         </div>
         
@@ -50,17 +52,30 @@ const UserDashboard = () => {
           {activeAgents.map((agent) => (
             <Card 
               key={agent.id} 
-              className="transition-all hover:shadow-lg cursor-pointer"
+              className="transition-all hover:shadow-lg cursor-pointer hover:-translate-y-1 duration-200 border-border/50 bg-card/80 backdrop-blur-sm"
               onClick={() => setSelectedAgent(agent)}
             >
-              <CardHeader>
-                <CardTitle>{agent.name}</CardTitle>
-                <CardDescription>
-                  Usage: {agent.usage.toLocaleString()} conversations
+              <CardHeader className="pb-2">
+                <div className="flex justify-between items-start">
+                  <CardTitle className="text-xl">{agent.name}</CardTitle>
+                </div>
+                <CardDescription className="flex items-center gap-1">
+                  <Clock className="h-3 w-3" /> Created {new Date(agent.createdAt).toLocaleDateString()}
                 </CardDescription>
               </CardHeader>
+              
               <CardContent>
-                <p className="text-sm">{agent.description}</p>
+                <p className="text-sm mb-4">{agent.description}</p>
+                <div className="flex justify-between items-center mt-2">
+                  <Badge variant="secondary" className="flex items-center gap-1 font-normal">
+                    <BarChart2 className="h-3 w-3" />
+                    {agent.usage.toLocaleString()} conversations
+                  </Badge>
+                  <span className="text-xs text-muted-foreground flex items-center gap-1">
+                    <HelpCircle className="h-3 w-3" /> 
+                    Click to start
+                  </span>
+                </div>
               </CardContent>
             </Card>
           ))}

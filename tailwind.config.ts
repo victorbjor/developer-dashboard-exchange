@@ -139,6 +139,11 @@ export default {
 					'50%': {
 						opacity: '0.5'
 					}
+				},
+				'shimmer': {
+					'100%': {
+						transform: 'translateX(100%)'
+					}
 				}
 			},
 			animation: {
@@ -149,7 +154,8 @@ export default {
 				'scale-in': 'scale-in 0.2s ease-out',
 				'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
 				'slide-in': 'slide-in 0.3s ease-out',
-				'slide-out': 'slide-out 0.3s ease-out'
+				'slide-out': 'slide-out 0.3s ease-out',
+				'shimmer': 'shimmer 2s infinite'
 			}
 		}
 	},

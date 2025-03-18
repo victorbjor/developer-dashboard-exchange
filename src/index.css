@@ -14,7 +14,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
     
-    --primary: 211 100% 50%;
+    --primary: 221 83% 53%;
     --primary-foreground: 210 20% 98%;
     
     --secondary: 220 14.3% 95.9%;
@@ -42,6 +42,10 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    background-image: 
+      radial-gradient(at 100% 0%, rgba(var(--primary) / 0.05) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(var(--primary) / 0.05) 0px, transparent 50%);
+    background-attachment: fixed;
   }
 
   /* Glass morphism utilities */
@@ -61,6 +65,16 @@
   .hover-shadow {
     @apply transition-shadow duration-200 hover:shadow-lg;
   }
+  
+  /* Card styling utilities */
+  .card-elegant {
+    @apply border border-border/50 bg-card/80 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-300;
+  }
+  
+  /* Button enhancements */
+  .btn-elegant {
+    @apply shadow-sm hover:shadow transition-all;
+  }
 }
 
 @layer utilities {
@@ -70,5 +84,9 @@
   }
   .scroll-hidden::-webkit-scrollbar {
     display: none;
+  }
+  
+  .text-balance {
+    text-wrap: balance;
   }
 }
