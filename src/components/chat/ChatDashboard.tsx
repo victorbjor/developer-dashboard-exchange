@@ -1,13 +1,28 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Send, ArrowLeft } from "lucide-react";
+import { Send, ArrowLeft, InfoIcon } from "lucide-react";
 import ChatContainer from './ChatContainer';
 import ChatInput from './ChatInput';
 import AgentSelector from '../AgentSelector';
 import { Agent } from '../types/Agent';
 import { Message } from './ChatContainer';
 import InfoPanel from '../InfoPanel';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { 
+  Drawer, 
+  DrawerTrigger, 
+  DrawerContent, 
+  DrawerHeader,
+  DrawerTitle,
+  DrawerClose
+} from "@/components/ui/drawer";
+import { 
+  Sheet, 
+  SheetContent, 
+  SheetTrigger 
+} from "@/components/ui/sheet";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface ChatDashboardProps {
   initialAgent?: Agent | null;
@@ -28,6 +43,8 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [isSending, setIsSending] = useState(false);
   const [infoContent, setInfoContent] = useState<string | null>(null);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const handleAgentSelect = (agent: Agent) => {
     setSelectedAgent(agent);
@@ -74,6 +91,10 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
       // Update info panel with the new message's info content
       if (mockResponse.info) {
         setInfoContent(mockResponse.info);
+        // If there's new info content, show a notification or indicator on mobile
+        if (isMobile) {
+          setIsInfoOpen(true);
+        }
       }
     }, 1500);
   };
@@ -82,6 +103,16 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
     setInfoContent(info);
   };
   
+  const renderInfoPanel = () => {
+    if (!infoContent) return null;
+
+    return (
+      <div className="space-y-4">
+        <InfoPanel markdownContent={infoContent} />
+      </div>
+    );
+  };
+
   if (showSelection) {
     return (
       <div className="container mx-auto p-4 md:p-6 max-w-4xl">
@@ -115,11 +146,38 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
         <h1 className="text-xl font-medium">
           {selectedAgent ? `Chat with ${selectedAgent.name}` : 'Chat with AI Assistant'}
         </h1>
-        <AgentSelector 
-          agents={mockAgents as Agent[]} 
-          selectedAgent={selectedAgent} 
-          onSelectAgent={handleAgentSelect} 
-        />
+        <div className="flex items-center gap-2">
+          {isMobile && infoContent && (
+            <Drawer>
+              <DrawerTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  className="relative"
+                  onClick={() => setIsInfoOpen(false)}
+                >
+                  <InfoIcon className="h-4 w-4" />
+                  {isInfoOpen && (
+                    <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500"></span>
+                  )}
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <DrawerHeader>
+                  <DrawerTitle>Additional Information</DrawerTitle>
+                </DrawerHeader>
+                <div className="px-4 pb-4">
+                  {renderInfoPanel()}
+                </div>
+              </DrawerContent>
+            </Drawer>
+          )}
+          <AgentSelector 
+            agents={mockAgents as Agent[]} 
+            selectedAgent={selectedAgent} 
+            onSelectAgent={handleAgentSelect} 
+          />
+        </div>
       </div>
       
       <div className="flex flex-1 overflow-hidden">
@@ -151,12 +209,25 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
           </div>
         </div>
         
-        {/* Info Panel */}
-        {infoContent && (
-          <div className="w-1/3 border-l p-4 hidden md:block">
-            <h3 className="text-lg font-medium mb-4">Additional Information</h3>
-            <InfoPanel markdownContent={infoContent} />
-          </div>
+        {/* Info Panel for Desktop */}
+        {infoContent && !isMobile && (
+          <Sheet defaultOpen={true}>
+            <SheetContent className="w-[350px] sm:w-[540px] p-0 border-l rounded-none" side="right">
+              <Collapsible className="w-full">
+                <div className="border-b p-4 flex justify-between items-center">
+                  <h3 className="font-medium">Additional Information</h3>
+                  <CollapsibleTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <ArrowLeft className="h-4 w-4" />
+                    </Button>
+                  </CollapsibleTrigger>
+                </div>
+                <CollapsibleContent className="p-4">
+                  {renderInfoPanel()}
+                </CollapsibleContent>
+              </Collapsible>
+            </SheetContent>
+          </Sheet>
         )}
       </div>
     </div>
