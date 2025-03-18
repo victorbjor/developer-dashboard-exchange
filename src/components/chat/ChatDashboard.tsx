@@ -131,7 +131,10 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
             type="submit" 
             form="chatForm" 
             disabled={isSending}
-            onClick={() => document.getElementById('chatForm')?.requestSubmit()}
+            onClick={() => {
+              const formElement = document.getElementById("chatForm") as HTMLFormElement;
+              if (formElement) formElement.requestSubmit();
+            }}
           >
             <Send className="h-4 w-4" />
           </Button>
