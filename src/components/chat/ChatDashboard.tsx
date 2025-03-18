@@ -36,6 +36,7 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
   const handleBackToSelection = () => {
     setShowSelection(true);
     setSelectedAgent(null);
+    setMessages([]);
   };
 
   const handleSendMessage = async (message: string, attachments: File[]) => {
@@ -104,7 +105,9 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
         <Button variant="ghost" size="icon" onClick={handleBackToSelection}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <h1 className="text-xl font-medium">Chat with AI Assistant</h1>
+        <h1 className="text-xl font-medium">
+          {selectedAgent ? `Chat with ${selectedAgent.name}` : 'Chat with AI Assistant'}
+        </h1>
         <AgentSelector 
           agents={mockAgents as Agent[]} 
           selectedAgent={selectedAgent} 
@@ -123,7 +126,13 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
             onSendMessage={handleSendMessage} 
             isSending={isSending} 
           />
-          <Button size="icon" type="submit" form="chatForm">
+          <Button 
+            size="icon" 
+            type="submit" 
+            form="chatForm" 
+            disabled={isSending}
+            onClick={() => document.getElementById('chatForm')?.requestSubmit()}
+          >
             <Send className="h-4 w-4" />
           </Button>
         </div>
