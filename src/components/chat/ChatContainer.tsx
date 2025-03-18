@@ -23,17 +23,22 @@ interface ChatContainerProps {
 }
 
 const ChatContainer = ({ initialMessages = [], onInfoUpdate }: ChatContainerProps) => {
-  const [messages, setMessages] = useState<Message[]>(initialMessages || []);
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  // Update local messages state when initialMessages prop changes
+  useEffect(() => {
+    setMessages(initialMessages);
+  }, [initialMessages]);
   
   // Scroll to bottom of messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     
     // Update info panel when messages change
-    const lastInfoMessage = [...messages].reverse().find(m => m.role === 'agent' && m.info);
-    if (lastInfoMessage?.info) {
-      onInfoUpdate(lastInfoMessage.info);
+    const lastAgentMessage = [...messages].reverse().find(m => m.role === 'agent' && m.info);
+    if (lastAgentMessage?.info) {
+      onInfoUpdate(lastAgentMessage.info);
     }
   }, [messages, onInfoUpdate]);
 

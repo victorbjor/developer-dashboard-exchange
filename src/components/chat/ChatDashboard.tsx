@@ -7,6 +7,7 @@ import ChatInput from './ChatInput';
 import AgentSelector from '../AgentSelector';
 import { Agent } from '../types/Agent';
 import { Message } from './ChatContainer';
+import InfoPanel from '../InfoPanel';
 
 interface ChatDashboardProps {
   initialAgent?: Agent | null;
@@ -37,6 +38,7 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
     setShowSelection(true);
     setSelectedAgent(null);
     setMessages([]);
+    setInfoContent(null);
   };
 
   const handleSendMessage = async (message: string, attachments: File[]) => {
@@ -68,6 +70,11 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
       
       setMessages(prev => [...prev, mockResponse]);
       setIsSending(false);
+      
+      // Update info panel with the new message's info content
+      if (mockResponse.info) {
+        setInfoContent(mockResponse.info);
+      }
     }, 1500);
   };
 
@@ -115,30 +122,42 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
         />
       </div>
       
-      <ChatContainer 
-        initialMessages={messages} 
-        onInfoUpdate={handleInfoUpdate}
-      />
-      
-      <div className="border-t p-4 bg-background">
-        <div className="max-w-3xl w-full mx-auto flex gap-2">
-          <ChatInput 
-            onSendMessage={handleSendMessage} 
-            isSending={isSending} 
+      <div className="flex flex-1 overflow-hidden">
+        <div className="flex-1 flex flex-col">
+          <ChatContainer 
+            initialMessages={messages} 
+            onInfoUpdate={handleInfoUpdate}
           />
-          <Button 
-            size="icon" 
-            type="submit" 
-            form="chatForm" 
-            disabled={isSending}
-            onClick={() => {
-              const formElement = document.getElementById("chatForm") as HTMLFormElement;
-              if (formElement) formElement.requestSubmit();
-            }}
-          >
-            <Send className="h-4 w-4" />
-          </Button>
+          
+          <div className="border-t p-4 bg-background">
+            <div className="max-w-3xl w-full mx-auto flex gap-2">
+              <ChatInput 
+                onSendMessage={handleSendMessage} 
+                isSending={isSending} 
+              />
+              <Button 
+                size="icon" 
+                type="submit" 
+                form="chatForm" 
+                disabled={isSending}
+                onClick={() => {
+                  const formElement = document.getElementById("chatForm") as HTMLFormElement;
+                  if (formElement) formElement.requestSubmit();
+                }}
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
         </div>
+        
+        {/* Info Panel */}
+        {infoContent && (
+          <div className="w-1/3 border-l p-4 hidden md:block">
+            <h3 className="text-lg font-medium mb-4">Additional Information</h3>
+            <InfoPanel markdownContent={infoContent} />
+          </div>
+        )}
       </div>
     </div>
   );
