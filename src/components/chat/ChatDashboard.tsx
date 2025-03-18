@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Send, ArrowLeft, Info, BookOpenText } from "lucide-react";
+import { Send, ArrowLeft, BookOpenText } from "lucide-react";
 import ChatContainer from './ChatContainer';
 import ChatInput from './ChatInput';
 import AgentSelector from '../AgentSelector';
@@ -114,12 +114,8 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
     );
   }
 
-  const mainContainerClass = isMobile 
-    ? "flex flex-col h-[calc(100vh-4rem)]" 
-    : `flex flex-col h-[calc(100vh-4rem)] ${showInfoPanel ? "md:grid md:grid-cols-[1fr_400px]" : ""}`;
-
   return (
-    <div className={mainContainerClass}>
+    <div className="flex flex-col h-[calc(100vh-4rem)]">
       <div className="border-b p-4 flex justify-between items-center">
         <Button variant="ghost" size="icon" onClick={handleBackToSelection}>
           <ArrowLeft className="h-4 w-4" />
@@ -128,20 +124,6 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
           {selectedAgent ? `Chat with ${selectedAgent.name}` : 'Chat with AI Assistant'}
         </h1>
         <div className="flex items-center gap-2">
-          {infoContent && (
-            <Button
-              variant="outline"
-              size="icon"
-              className="relative"
-              onClick={toggleInfoPanel}
-              title="Show additional information"
-            >
-              <BookOpenText className="h-4 w-4" />
-              {!showInfoPanel && (
-                <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500"></span>
-              )}
-            </Button>
-          )}
           <AgentSelector 
             agents={mockAgents as Agent[]} 
             selectedAgent={selectedAgent} 
@@ -150,13 +132,32 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
         </div>
       </div>
       
-      <div className={`flex ${isMobile ? "flex-col" : "flex-1"} overflow-hidden`}>
+      <div className={`flex-1 flex ${showInfoPanel ? (isMobile ? "flex-col" : "flex-row") : "flex-col"} overflow-hidden`}>
         {/* Main chat area */}
-        <div className={`flex-1 flex flex-col ${isMobile && showInfoPanel ? "h-[50vh]" : ""}`}>
-          <ChatContainer 
-            initialMessages={messages} 
-            onInfoUpdate={handleInfoUpdate}
-          />
+        <div className={`flex-1 flex flex-col relative ${isMobile && showInfoPanel ? "h-[50vh]" : ""}`}>
+          <div className="flex-1 overflow-hidden">
+            <ChatContainer 
+              initialMessages={messages} 
+              onInfoUpdate={handleInfoUpdate}
+            />
+            
+            {infoContent && (
+              <div className="absolute bottom-4 right-4">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="shadow-md"
+                  onClick={toggleInfoPanel}
+                  title="Show additional information"
+                >
+                  <BookOpenText className="h-4 w-4" />
+                  {!showInfoPanel && (
+                    <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500"></span>
+                  )}
+                </Button>
+              </div>
+            )}
+          </div>
           
           <div className="border-t p-4 bg-background">
             <div className="max-w-3xl w-full mx-auto flex gap-2">
@@ -182,7 +183,7 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
         
         {/* Info Panel - conditionally shown */}
         {showInfoPanel && infoContent && (
-          <div className={`${isMobile ? "border-t" : "border-l"} p-4 ${isMobile ? "flex-1 overflow-auto" : "overflow-hidden"}`}>
+          <div className={`${isMobile ? "border-t" : "border-l"} p-4 ${isMobile ? "flex-1 overflow-auto" : "w-[400px] overflow-hidden"}`}>
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-medium">Additional Information</h3>
               <Button variant="ghost" size="icon" onClick={toggleInfoPanel}>
