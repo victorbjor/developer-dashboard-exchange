@@ -6,6 +6,7 @@ import ChatContainer from './ChatContainer';
 import ChatInput from './ChatInput';
 import AgentSelector from '../AgentSelector';
 import { Agent } from '../types/Agent';
+import { Message } from './ChatContainer';
 
 interface ChatDashboardProps {
   initialAgent?: Agent | null;
@@ -17,9 +18,15 @@ const mockAgents = [
   { id: '3', name: 'Technical Support', description: 'Get technical assistance' }
 ];
 
+// Initial empty messages array
+const initialMessages: Message[] = [];
+
 const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(initialAgent || null);
   const [showSelection, setShowSelection] = useState<boolean>(!initialAgent);
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [isSending, setIsSending] = useState(false);
+  const [infoContent, setInfoContent] = useState<string | null>(null);
 
   const handleAgentSelect = (agent: Agent) => {
     setSelectedAgent(agent);
@@ -29,6 +36,42 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
   const handleBackToSelection = () => {
     setShowSelection(true);
     setSelectedAgent(null);
+  };
+
+  const handleSendMessage = async (message: string, attachments: File[]) => {
+    if ((!message.trim() && attachments.length === 0) || isSending) return;
+    
+    const newUserMessage: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: message.trim(),
+      timestamp: new Date().toISOString(),
+      attachments: attachments.map(file => ({
+        name: file.name,
+        type: file.type
+      }))
+    };
+    
+    setMessages(prev => [...prev, newUserMessage]);
+    setIsSending(true);
+    
+    // Simulate API call with delay
+    setTimeout(() => {
+      const mockResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'agent',
+        content: `I've processed your request${attachments.length ? ` with ${attachments.length} file(s)` : ''}. Here's my response to "${message.trim() || 'your files'}"`,
+        timestamp: new Date().toISOString(),
+        info: `## Additional Information\n\nHere is some markdown content that provides more context:\n\n- Point one with important details\n- Point two with technical explanation\n\n### Code Example\n\`\`\`javascript\nconst data = analyze(userInput);\nreturn formatResponse(data);\n\`\`\`\n\n> Note: This is simulated markdown content that would normally contain information relevant to the user's query.`
+      };
+      
+      setMessages(prev => [...prev, mockResponse]);
+      setIsSending(false);
+    }, 1500);
+  };
+
+  const handleInfoUpdate = (info: string | null) => {
+    setInfoContent(info);
   };
   
   if (showSelection) {
@@ -69,11 +112,17 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
         />
       </div>
       
-      <ChatContainer />
+      <ChatContainer 
+        initialMessages={messages} 
+        onInfoUpdate={handleInfoUpdate}
+      />
       
       <div className="border-t p-4 bg-background">
         <div className="max-w-3xl w-full mx-auto flex gap-2">
-          <ChatInput />
+          <ChatInput 
+            onSendMessage={handleSendMessage} 
+            isSending={isSending} 
+          />
           <Button size="icon" type="submit" form="chatForm">
             <Send className="h-4 w-4" />
           </Button>
