@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { BarChart3, Code2, MessageSquare, UserRound } from "lucide-react";
@@ -9,14 +9,14 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   
   // Handle scroll effect
-  useState(() => {
+  useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
     
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  });
+  }, []);
 
   return (
     <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${
@@ -24,10 +24,12 @@ const Header = () => {
     }`}>
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-white">
-            <Code2 className="h-5 w-5" />
-          </div>
-          <span className="text-lg font-medium">AgentHub</span>
+          <Link to="/" className="flex items-center gap-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-white">
+              <Code2 className="h-5 w-5" />
+            </div>
+            <span className="text-lg font-medium">AgentHub</span>
+          </Link>
         </div>
         
         <nav className="hidden md:flex items-center gap-6">
