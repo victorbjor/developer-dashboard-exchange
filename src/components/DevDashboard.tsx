@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { UploadCloud } from "lucide-react";
@@ -9,6 +8,7 @@ import AgentCreator from './dev/AgentCreator';
 import { Agent } from './types/Agent';
 import AgentUploader from './dev/AgentUploader';
 import { toast } from "sonner";
+import AgentDetails from './dev/AgentDetails';
 
 // Mock data
 const mockAgents: Agent[] = [
@@ -43,6 +43,14 @@ const mockAgents: Agent[] = [
     usage: 0,
     createdAt: '2024-01-05',
     status: 'pending'
+  },
+  {
+    id: '5',
+    name: 'Customer Feedback Agent',
+    description: 'Collects and analyzes customer sentiment',
+    usage: 128,
+    createdAt: '2024-02-15',
+    status: 'disabled'
   }
 ];
 
@@ -87,64 +95,17 @@ const DevDashboard: React.FC = () => {
   
   if (currentView === 'agent-details' && selectedAgent) {
     return (
-      <div className="container mx-auto p-4 md:p-6 space-y-8 animate-fade-in">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div>
-            <h1 className="text-3xl font-semibold">{selectedAgent.name}</h1>
-            <p className="text-muted-foreground">{selectedAgent.description}</p>
-          </div>
-          <Button onClick={handleBackToDashboard} variant="outline">
-            Back to Dashboard
-          </Button>
-        </div>
-        
-        <div className="bg-muted/20 p-6 rounded-lg">
-          <h2 className="text-xl font-medium mb-4">Agent Details</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <p><span className="font-medium">ID:</span> {selectedAgent.id}</p>
-              <p><span className="font-medium">Status:</span> {selectedAgent.status}</p>
-              <p><span className="font-medium">Created:</span> {selectedAgent.createdAt}</p>
-            </div>
-            <div>
-              <p><span className="font-medium">Usage:</span> {selectedAgent.usage} interactions</p>
-              <p><span className="font-medium">Version:</span> {selectedAgent.version || 'N/A'}</p>
-              <p><span className="font-medium">Author:</span> {selectedAgent.author || 'N/A'}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <AgentUploader onAgentAdded={agent => {
-            // In a real app, this would update the agent
-            toast.success("Agent files updated successfully");
-          }} />
-          
-          <div className="space-y-4">
-            <h2 className="text-xl font-medium">Edit Agent Information</h2>
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="agent-name" className="block text-sm font-medium mb-1">Agent Name</label>
-                <input 
-                  id="agent-name" 
-                  defaultValue={selectedAgent.name}
-                  className="w-full p-2 border rounded"
-                />
-              </div>
-              <div>
-                <label htmlFor="agent-desc" className="block text-sm font-medium mb-1">Description</label>
-                <textarea 
-                  id="agent-desc" 
-                  defaultValue={selectedAgent.description}
-                  className="w-full p-2 border rounded"
-                  rows={3}
-                />
-              </div>
-              <Button className="mt-2">Save Changes</Button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <AgentDetails 
+        agent={selectedAgent}
+        onBack={handleBackToDashboard}
+        onUpdate={(updatedAgent) => {
+          setAgents(agents.map(agent => 
+            agent.id === updatedAgent.id ? updatedAgent : agent
+          ));
+          setSelectedAgent(updatedAgent);
+          toast.success("Agent updated successfully");
+        }}
+      />
     );
   }
 

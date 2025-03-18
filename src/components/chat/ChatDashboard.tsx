@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Send, ArrowLeft, BookOpenText } from "lucide-react";
 import ChatContainer from './ChatContainer';
@@ -17,7 +16,7 @@ interface ChatDashboardProps {
 const mockAgents = [
   { id: '1', name: 'Customer Support', description: 'Get help with products and services' },
   { id: '2', name: 'Product Recommendation', description: 'Get personalized product recommendations' },
-  { id: '3', name: 'Technical Support', description: 'Get technical assistance' }
+  { id: '3', name: 'Technical Support', description: 'Get technical assistance', status: 'disabled' }
 ];
 
 // Initial empty messages array
@@ -31,8 +30,16 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
   const [infoContent, setInfoContent] = useState<string | null>(null);
   const [showInfoPanel, setShowInfoPanel] = useState(false);
   const isMobile = useIsMobile();
+  
+  useEffect(() => {
+    if (infoContent && !isMobile) {
+      setShowInfoPanel(true);
+    }
+  }, [infoContent, isMobile]);
 
   const handleAgentSelect = (agent: Agent) => {
+    if (agent.status === 'disabled') return;
+    
     setSelectedAgent(agent);
     setShowSelection(false);
   };
@@ -62,7 +69,6 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
     setMessages(prev => [...prev, newUserMessage]);
     setIsSending(true);
     
-    // Simulate API call with delay
     setTimeout(() => {
       const mockResponse: Message = {
         id: (Date.now() + 1).toString(),
@@ -75,7 +81,6 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
       setMessages(prev => [...prev, mockResponse]);
       setIsSending(false);
       
-      // Update info panel with the new message's info content
       if (mockResponse.info) {
         setInfoContent(mockResponse.info);
       }
@@ -102,10 +107,19 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
           {mockAgents.map((agent) => (
             <div 
               key={agent.id} 
-              className="border rounded-lg p-6 cursor-pointer hover:bg-muted/50 transition-colors"
+              className={`border rounded-lg p-6 ${agent.status === 'disabled' ? 
+                'opacity-60 cursor-not-allowed' : 
+                'cursor-pointer hover:bg-muted/50 transition-colors'}`}
               onClick={() => handleAgentSelect(agent as Agent)}
             >
-              <h3 className="font-medium text-lg">{agent.name}</h3>
+              <div className="flex justify-between items-start">
+                <h3 className="font-medium text-lg">{agent.name}</h3>
+                {agent.status === 'disabled' && (
+                  <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full">
+                    Chat disabled
+                  </span>
+                )}
+              </div>
               <p className="text-sm text-muted-foreground mt-2">{agent.description}</p>
             </div>
           ))}
@@ -125,7 +139,7 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
         </h1>
         <div className="flex items-center gap-2">
           <AgentSelector 
-            agents={mockAgents as Agent[]} 
+            agents={mockAgents.filter(agent => agent.status !== 'disabled') as Agent[]} 
             selectedAgent={selectedAgent} 
             onSelectAgent={handleAgentSelect} 
           />
@@ -133,7 +147,6 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
       </div>
       
       <div className={`flex-1 flex ${showInfoPanel ? (isMobile ? "flex-col" : "flex-row") : "flex-col"} overflow-hidden`}>
-        {/* Main chat area */}
         <div className={`flex-1 flex flex-col relative ${isMobile && showInfoPanel ? "h-[50vh]" : ""}`}>
           <div className="flex-1 overflow-hidden">
             <ChatContainer 
@@ -142,7 +155,7 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
             />
             
             {infoContent && (
-              <div className="absolute bottom-4 right-4">
+              <div className="absolute bottom-20 right-4">
                 <Button
                   variant="outline"
                   size="icon"
@@ -181,7 +194,6 @@ const ChatDashboard: React.FC<ChatDashboardProps> = ({ initialAgent }) => {
           </div>
         </div>
         
-        {/* Info Panel - conditionally shown */}
         {showInfoPanel && infoContent && (
           <div className={`${isMobile ? "border-t" : "border-l"} p-4 ${isMobile ? "flex-1 overflow-auto" : "w-[400px] overflow-hidden"}`}>
             <div className="flex justify-between items-center mb-4">

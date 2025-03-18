@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Agent } from '../types/Agent';
+import { Ban } from "lucide-react";
 
 interface AgentsListProps {
   agents: Agent[];
@@ -37,7 +38,10 @@ const AgentsList = ({ agents, onSelectAgent }: AgentsListProps) => {
                 className="grid grid-cols-12 p-4 text-sm items-center hover:bg-muted/30 cursor-pointer"
                 onClick={() => onSelectAgent(agent)}
               >
-                <div className="col-span-4 md:col-span-3 font-medium">{agent.name}</div>
+                <div className="col-span-4 md:col-span-3 font-medium flex items-center gap-2">
+                  {agent.status === 'disabled' && <Ban className="h-4 w-4 text-muted-foreground" />}
+                  {agent.name}
+                </div>
                 <div className="col-span-4 md:col-span-3 text-muted-foreground truncate hidden md:block">
                   {agent.description}
                 </div>
@@ -47,6 +51,7 @@ const AgentsList = ({ agents, onSelectAgent }: AgentsListProps) => {
                   <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                     agent.status === 'active' ? 'bg-green-100 text-green-800' :
                     agent.status === 'inactive' ? 'bg-gray-100 text-gray-800' :
+                    agent.status === 'disabled' ? 'bg-red-100 text-red-800' :
                     'bg-yellow-100 text-yellow-800'
                   }`}>
                     {agent.status}

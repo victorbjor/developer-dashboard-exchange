@@ -5,7 +5,7 @@ export interface Agent {
   description: string;
   usage: number;
   createdAt: string;
-  status: 'active' | 'inactive' | 'pending';
+  status: 'active' | 'inactive' | 'pending' | 'disabled';
   version?: string;
   lastUpdated?: string;
   category?: string;

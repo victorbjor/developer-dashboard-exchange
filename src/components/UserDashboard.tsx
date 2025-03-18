@@ -28,12 +28,15 @@ const availableAgents: Agent[] = [
     description: "Assistance with research, data analysis, and information gathering",
     usage: 321,
     createdAt: "2023-12-10",
-    status: "active"
+    status: "disabled"
   }
 ];
 
 const UserDashboard = () => {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
+  
+  // Filter out disabled agents
+  const activeAgents = availableAgents.filter(agent => agent.status !== 'disabled');
   
   if (!selectedAgent) {
     return (
@@ -44,7 +47,7 @@ const UserDashboard = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {availableAgents.map((agent) => (
+          {activeAgents.map((agent) => (
             <Card 
               key={agent.id} 
               className="transition-all hover:shadow-lg cursor-pointer"
