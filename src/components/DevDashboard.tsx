@@ -46,9 +46,14 @@ const mockAgents: Agent[] = [
 
 const DevDashboard: React.FC = () => {
   const [agents, setAgents] = useState<Agent[]>(mockAgents);
+  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
 
   const addNewAgent = (newAgent: Agent) => {
     setAgents([...agents, newAgent]);
+  };
+  
+  const handleSelectAgent = (agent: Agent) => {
+    setSelectedAgent(agent);
   };
 
   const totalUsage = agents.reduce((sum, agent) => sum + agent.usage, 0);
@@ -78,7 +83,10 @@ const DevDashboard: React.FC = () => {
         <AgentUploader onAgentAdded={addNewAgent} />
       </div>
       
-      <AgentsList agents={agents} />
+      <AgentsList 
+        agents={agents} 
+        onSelectAgent={handleSelectAgent} 
+      />
     </div>
   );
 };
