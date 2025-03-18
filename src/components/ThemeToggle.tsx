@@ -9,10 +9,10 @@ const ThemeToggle: React.FC = () => {
 
   return (
     <Button
-      variant="ghost"
+      variant="outline"
       size="icon"
       onClick={toggleTheme}
-      className="rounded-full"
+      className="rounded-full bg-background/80 backdrop-blur-sm border border-border shadow-md hover:shadow-lg transition-all"
       aria-label="Toggle theme"
     >
       {theme === "light" ? (
