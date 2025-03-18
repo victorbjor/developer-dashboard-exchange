@@ -19,17 +19,6 @@ const mockAgents = [
   { id: "3", name: "Data Analysis Assistant", description: "Helps analyze and visualize data" },
 ];
 
-// Mock chat messages for initial display
-const initialMessages = [
-  {
-    id: '1',
-    role: 'agent',
-    content: 'Hello! I\'m your AI assistant. How can I help you today?',
-    timestamp: new Date(Date.now() - 50000).toISOString(),
-    info: null
-  }
-];
-
 interface Message {
   id: string;
   role: 'user' | 'agent';
@@ -38,6 +27,17 @@ interface Message {
   info?: string | null;
   attachments?: {name: string, type: string}[];
 }
+
+// Mock chat messages for initial display
+const initialMessages: Message[] = [
+  {
+    id: '1',
+    role: 'agent',
+    content: 'Hello! I\'m your AI assistant. How can I help you today?',
+    timestamp: new Date(Date.now() - 50000).toISOString(),
+    info: null
+  }
+];
 
 const UserDashboard = () => {
   const [selectedAgent, setSelectedAgent] = useState(mockAgents[0]);
