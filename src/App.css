@@ -75,3 +75,16 @@
   transform: translateY(-4px);
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
 }
+
+/* Dark mode specific styles */
+.dark .hover-lift:hover {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+.dark .shimmer {
+  background: linear-gradient(90deg, hsl(var(--accent) / 0.7), hsl(var(--muted) / 0.5));
+}
+
+.dark .logo:hover {
+  filter: drop-shadow(0 0 2em rgba(var(--primary) / 0.5));
+}
