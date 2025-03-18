@@ -5,9 +5,10 @@ import { Agent } from '../types/Agent';
 
 interface AgentsListProps {
   agents: Agent[];
+  onSelectAgent: (agent: Agent) => void;
 }
 
-const AgentsList = ({ agents }: AgentsListProps) => {
+const AgentsList = ({ agents, onSelectAgent }: AgentsListProps) => {
   return (
     <Card className="hover-shadow">
       <CardHeader>
@@ -31,7 +32,11 @@ const AgentsList = ({ agents }: AgentsListProps) => {
           
           <div className="divide-y">
             {agents.map(agent => (
-              <div key={agent.id} className="grid grid-cols-12 p-4 text-sm items-center">
+              <div 
+                key={agent.id} 
+                className="grid grid-cols-12 p-4 text-sm items-center hover:bg-muted/30 cursor-pointer"
+                onClick={() => onSelectAgent(agent)}
+              >
                 <div className="col-span-4 md:col-span-3 font-medium">{agent.name}</div>
                 <div className="col-span-4 md:col-span-3 text-muted-foreground truncate hidden md:block">
                   {agent.description}
